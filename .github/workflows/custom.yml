@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: checkstyle-report
-          path: target/site/checkstyle-result.xml
+          path: target/checkstyle-result.xml
 
       - name: Run ALL Tests (including integration)
         # This will now succeed because we have installed the Docker client and
