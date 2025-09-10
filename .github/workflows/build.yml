@@ -26,8 +26,6 @@ jobs:
     name: PR Checks (Style, Test, Build)
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    # As requested, run steps inside a specific maven container
-    container: maven:3.8.5-openjdk-17
 
     steps:
     
