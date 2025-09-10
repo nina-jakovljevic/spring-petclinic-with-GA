@@ -76,6 +76,9 @@ jobs:
         with:
           name: app-jar
           path: target
+          
+      - name: Extract short SHA
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -92,7 +95,9 @@ jobs:
           context: .
           push: true
           # Tag with the unique commit ID from the PR's source branch
-          tags: ${{ env.DOCKER_MR_REGISTRY }}/${{ env.DOCKER_IMAGE_OWNER }}/mr:${{ github.event.pull_request.head.sha }}
+          tags: |
+            ${{ env.DOCKER_IMAGE_OWNER }}/mr:latest
+            ${{ env.DOCKER_IMAGE_OWNER }}/mr:${{ env.SHORT_SHA }}
 
   # ===============================================================
   # == JOB 3: RUNS ONLY FOR PUSHES TO THE MAIN BRANCH
