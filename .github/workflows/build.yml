@@ -26,17 +26,17 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     container:
-      image: maven:3.8.5-eclipse-temurin-17
+      image: image: maven:3.8.5-openjdk-17-alpine
       options: --volume /var/run/docker.sock:/var/run/docker.sock
     env:
       DOCKER_HOST: unix:///var/run/docker.sock
     
 
     steps:
-      - name: Install Docker CLI
+      - name: Install Docker CLI and Compose on Alpine
         run: |
-          apt-get update
-          apt-get install -y docker-ce-cli
+          apk update
+          apk add docker-cli docker-compose
     
       - name: Checkout code
         uses: actions/checkout@v4
