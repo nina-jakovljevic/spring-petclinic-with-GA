@@ -67,6 +67,11 @@ jobs:
       - name: Run Tests
         run: mvn test
 
+      - name: Display Docker Compose Logs
+        # This makes the step run even if the tests fail
+        if: always()
+        run: docker compose logs
+
       - name: Build Application JAR (skip tests)
         run: mvn package -DskipTests
 
