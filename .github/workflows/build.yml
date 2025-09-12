@@ -33,10 +33,11 @@ jobs:
     
 
     steps:
-      - name: Install Docker CLI
+      - name: Install Docker CLI using yum
         run: |
-          apt-get update
-          apt-get install -y docker-ce-cli
+          yum install -y yum-utils
+          yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+          yum install -y docker-ce-cli
     
       - name: Checkout code
         uses: actions/checkout@v4
