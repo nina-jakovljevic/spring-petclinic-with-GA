@@ -33,8 +33,13 @@ jobs:
     
 
     steps:
-      - name: Install Docker Compose v2 Plugin
+      - name: Install Docker CLI and Compose v2 Plugin
         run: |
+          # Part 1: Install the base Docker CLI program first
+          apk update
+          apk add docker-cli
+          
+          # Part 2: Now, download and install the Compose v2 plugin
           COMPOSE_VERSION=v2.27.0
           DOCKER_CONFIG=${DOCKER_CONFIG:-/usr/local/lib/docker}
           mkdir -p $DOCKER_CONFIG/cli-plugins
