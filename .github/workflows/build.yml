@@ -10,6 +10,7 @@ on:
   pull_request:
     branches:
       - main
+      - feat/test-3
 
 # Environment variables 
 env:
