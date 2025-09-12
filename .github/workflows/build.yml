@@ -10,6 +10,7 @@ on:
   pull_request:
     branches:
       - main
+      - feat/test-3
 
 # Environment variables 
 env:
@@ -25,13 +26,30 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     container:
-      image: maven:3.8.5-openjdk-17
+      image: maven:3.8.6-eclipse-temurin-17-alpine
       options: --volume /var/run/docker.sock:/var/run/docker.sock
     env:
       DOCKER_HOST: unix:///var/run/docker.sock
     
 
     steps:
+      - name: Install Docker CLI and Compose v2 Plugin
+        run: |
+          # Part 1: Install the base Docker CLI program first
+          apk update
+          apk add docker-cli
+          
+          # Part 2: Now, download and install the Compose v2 plugin
+          COMPOSE_VERSION=v2.27.0
+          DOCKER_CONFIG=${DOCKER_CONFIG:-/usr/local/lib/docker}
+          mkdir -p $DOCKER_CONFIG/cli-plugins
+          curl -sSL https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+      - name: Verify Docker Versions
+        run: |
+          docker --version
+          # This command will now work and show a v2.x.x version
+          docker compose version
     
       - name: Checkout code
         uses: actions/checkout@v4
@@ -97,7 +115,6 @@ jobs:
           tags: |
             ${{ env.DOCKER_IMAGE_OWNER }}/mr:latest
             ${{ env.DOCKER_IMAGE_OWNER }}/mr:${{ env.SHORT_SHA }}
-
   # ===============================================================
   # JOB 3: RUNS ONLY FOR PUSHES TO THE MAIN BRANCH
   # ===============================================================
