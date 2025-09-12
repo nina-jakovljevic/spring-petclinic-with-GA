@@ -33,16 +33,19 @@ jobs:
     
 
     steps:
-      - name: Install Docker CLI and Compose on Alpine
+      - name: Install Docker Compose v2 Plugin
         run: |
-          apk update
-          apk add docker-cli docker-compose
+          COMPOSE_VERSION=v2.27.0
+          DOCKER_CONFIG=${DOCKER_CONFIG:-/usr/local/lib/docker}
+          mkdir -p $DOCKER_CONFIG/cli-plugins
+          curl -sSL https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
-      - name: Verify Docker Connection
+      - name: Verify Docker Versions
         run: |
           docker --version
-          docker-compose --version
-          docker info
+          # This command will now work and show a v2.x.x version
+          docker compose version
     
       - name: Checkout code
         uses: actions/checkout@v4
