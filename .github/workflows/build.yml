@@ -33,11 +33,10 @@ jobs:
     
 
     steps:
-      - name: Install Docker CLI using yum
+      - name: Install Docker CLI on Alpine
         run: |
-          yum install -y yum-utils
-          yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-          yum install -y docker-ce-cli
+          apk update
+          apk add docker-cli
     
       - name: Checkout code
         uses: actions/checkout@v4
